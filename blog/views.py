@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import get_object_or_404, render, redirect
 from django.http import HttpResponse
 from django.urls import reverse
 import logging
@@ -196,3 +196,26 @@ def new_post(request):
                 post.save()
                 return redirect('blog:dashboard')
         return render(request, 'blog/new_post.html', {'categories': categories, 'form': form})
+
+def edit_post(request, post_id):
+    categories = Category.objects.all()
+    post = get_object_or_404(Post, id=post_id)
+    form = PostForm()
+
+    if request.method == "POST":
+        #form
+        form =PostForm(request.POST, request.FILES, instance=post)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Post updated successfully.")
+            return redirect('blog:dashboard')
+        
+    return render(request, 'blog/edit_post.html', {'categories': categories, 'post': post, 'form': form})
+
+def delete_post(request, post_id):
+    post = get_object_or_404(Post, id=post_id)
+    post.delete()
+    messages.success(request, "Post deleted successfully.")
+    return redirect('blog:dashboard')
+    
+    return render(request, 'blog/delete_post.html', {'post': post})
