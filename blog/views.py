@@ -146,7 +146,7 @@ def forgot_password(request):
             current_site = get_current_site(request).domain
 
             # Build Reset Link URL
-            reset_link = f"http://{current_site}/reset-password/{uid}/{token}/"
+            reset_link = f"http://{current_site}/reset_password/{uid}/{token}/"
 
             subject = "Password Reset Requested"
             message = f"Click the link below to reset your password:\n\n{reset_link}"
